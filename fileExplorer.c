@@ -26,6 +26,7 @@ int main(){
                 break;
             case 2:
                 makeFile(fptr);
+                break;
             case 3:
                 printf("Exiting program\n");
                 return 0;
@@ -49,7 +50,18 @@ int main(){
     }
 
     int makeFile(FILE *file){
-        file = fopen("filename.txt", "w");
+        char fileName[100];
+        printf("Enter a name for the file: ");
+        scanf("%99s", fileName);
+        file = fopen(fileName, "w");
+
+        if (file == NULL) {
+            printf("Error creating the file.\n");
+            return 1; // Exit the program with an error code
+        }
+
         fclose(file);
+        printf("File '%s' created successfully.\n", fileName);
+
         return 0;
     }
