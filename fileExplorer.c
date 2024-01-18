@@ -1,29 +1,28 @@
 #include <stdio.h>
-//#define _DEFAULT_SOURCE
 #include <dirent.h>
 #include <unistd.h>
 #include <limits.h>
-#define NORMAL_COLOR  "\x1B[0m"
-#define GREEN  "\x1B[32m"
-#define BLUE  "\x1B[34m"
+#include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 
 // Function prototype
 int getDir(char *dir);
 int makeFile(FILE *file);
-int listFiles();
-int isSpecialDirectory(const char *name);
+void ls();
 int strcmp();
 
 int main(){
     FILE *fptr;
     char cwd[FILENAME_MAX]; //4096
     int choice;
-    while (1)
-    {
         printf("1. Display current directory\n");
         printf("2. Make a new file\n");
         printf("3. List all files\n");
         printf("4. Exit\n");
+    while (1)
+    {
+
         // Get user input
         printf("Enter your choice: ");
         scanf("%d", &choice);
@@ -40,7 +39,7 @@ int main(){
                 break;
             case 3:
                 printf("\n");
-                listFiles();
+                ls();
                 printf("\n");
 
                 break;
@@ -84,22 +83,75 @@ int main(){
     }
 
 
-        int listFiles() {
-          DIR * d;
-          struct dirent * dir;
-          d = opendir(".");
-          if (d) {
-            while ((dir = readdir(d)) != NULL) {
+void ls(){
+    DIR *directory;
+    struct dirent *entry;
 
-              if (dir -> d_type != DT_DIR) // if the type is not directory just print it with blue color
-                printf("%s%s\n", BLUE, dir -> d_name);
+    // Open the directory
+    directory = opendir(".");
 
-            }
-            closedir(d);
+    // Check if the directory was successfully opened
+    if (directory == NULL) {
+        perror("Unable to open directory");
+        return;
+    }
 
-          }
-          return 0;
+    // Arrays to store folder and file names
+    char **folders = NULL;
+    char **files = NULL;
+    int folderCount = 0;
+    int fileCount = 0;
 
+    // Read directory entries
+    while ((entry = readdir(directory)) != NULL) {
+        // Skip entries for "." and ".."
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
         }
 
+        // Get the full path of the entry
+        char fullpath[PATH_MAX];
+        snprintf(fullpath, sizeof(fullpath), "%s/%s", ".", entry->d_name);
+
+        // Get information about the entry
+        struct stat statbuf;
+        if (stat(fullpath, &statbuf) == -1) {
+            perror("Unable to get file status");
+            continue;
+        }
+
+        // Collect folder and file names
+        if (S_ISDIR(statbuf.st_mode)) {
+            // Directory
+            folders = realloc(folders, (folderCount + 1) * sizeof(char *));
+            folders[folderCount] = strdup(entry->d_name);
+            folderCount++;
+        } else {
+            // File
+            files = realloc(files, (fileCount + 1) * sizeof(char *));
+            files[fileCount] = strdup(entry->d_name);
+            fileCount++;
+        }
+
+    }
+
+        // Close the directory
+        closedir(directory);
+
+        // Print folders
+        for (int i = 0; i < folderCount; i++) {
+            printf("\033[1;34m%s\033[0m   ", folders[i]);
+            free(folders[i]);
+        }
+        free(folders);
+
+        // Print files
+        for (int i = 0; i < fileCount; i++) {
+            printf("\033[1;32m%s\033[0m   ", files[i]);
+            free(files[i]);
+        }
+        free(files);
+
+        printf("\n");
+    }   
 
