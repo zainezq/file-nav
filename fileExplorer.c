@@ -11,47 +11,52 @@ int getDir(char *dir);
 int makeFile(FILE *file);
 void ls();
 int strcmp();
+void printCommands();
 
-int main(){
+void printCommands(){
+    printf("1. Display all commands\n");
+    printf("2. Display current directory\n");
+    printf("3. Make a new file\n");
+    printf("4. List all files\n");
+    printf("5. Exit\n");
+}
+
+int main() {
     FILE *fptr;
     char cwd[FILENAME_MAX]; //4096
     int choice;
-        printf("1. Display current directory\n");
-        printf("2. Make a new file\n");
-        printf("3. List all files\n");
-        printf("4. Exit\n");
-    while (1)
-    {
+    printCommands();
 
+
+    while (1) {
         // Get user input
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        switch (choice){
-            case 1:
-                printf("\n");
-                getDir(cwd);
-                printf("\n");
-                break;
-            case 2:
-                printf("\n");
-                makeFile(fptr);
-                printf("\n");
-                break;
-            case 3:
-                printf("\n");
-                ls();
-                printf("\n");
-
-                break;
-            case 4:
-                printf("Exiting program\n");
-                return 0;
+        if (choice == 1)
+        {
+            printf("\n");
+            printCommands();
+            printf("\n");
+        } else if (choice == 2) {
+            printf("\n");
+            getDir(cwd);
+            printf("\n");
+        } else if (choice == 3) {
+            printf("\n");
+            makeFile(fptr);
+            printf("\n");
+        } else if (choice == 4) {
+            printf("\n");
+            ls();
+            printf("\n");
+        } else if (choice == 5) {
+            printf("Exiting program\n");
+            return 0;
+        } else {
+            printf("Invalid choice. Please enter a valid option.\n");
         }
-        
-        
-   
     }
-    
+
     return 0;
 }
 
