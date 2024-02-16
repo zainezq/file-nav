@@ -45,13 +45,13 @@ int main(){
     FILE *fptr;
     char cwd[FILENAME_MAX]; //4096
     int choice;
-    displayChoice();
-            printf("Enter your choice: ");
-
+        displayChoice();
+        printf("Enter your choice: ");
+        
     while (1)
     {
         scanf("%d", &choice);
-        clearInputBuffer(); // Clear the input buffer after reading the integer
+clearInputBuffer(); // Clear the input buffer after reading the integer
         switch (choice){
             case 1:
                 printf("\n");
@@ -69,7 +69,7 @@ int main(){
                 printf("\n");
                 break;
             case 4:
-                printf("\n");
+printf("\n");
                 removeFile();
                 printf("\n");
                 break;
@@ -82,8 +82,8 @@ int main(){
                 printf("Exiting program\n");
                 return 0;
         }
-    
-            // After executing a command, prompt the user to exit or go back to the main function
+        
+        // After executing a command, prompt the user to exit or go back to the main function
         printf("Do you want to exit the program? (1 for yes, 0 for no): ");
         scanf("%d", &choice);
         clearInputBuffer();
@@ -96,7 +96,7 @@ int main(){
             printf("Enter your choice: ");
         }
     }
-    
+
     return 0;
 }
 
