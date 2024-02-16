@@ -69,7 +69,7 @@ clearInputBuffer(); // Clear the input buffer after reading the integer
                 printf("\n");
                 break;
             case 4:
-printf("\n");
+                printf("\n");
                 removeFile();
                 printf("\n");
                 break;
